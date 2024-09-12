@@ -1,0 +1,57 @@
+/*Дано число R и массив размера N. Найти два соседних элемента массива, сумма
+которых наиболее близка к числу R (то есть такие элементы AK, и AK+1 для кото-
+рых величина |AK + AK+1 − R| является минимальной), и вывести эти элементы в
+порядке возрастания их индексов.*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void function(int* A, int N, int R, int* firstNum, int* secondNum)
+{
+	//Переменная наименьшей разници между суммой и R
+	int minDif = 2;
+	for (int i = 1; i < N; i++)
+	{
+		//Находим наименьшую матрицу
+		int sum = A[i] + A[i - 1];
+		if (sum > R)
+		{
+			if ((sum - R) < minDif)
+			{
+				minDif = sum - R;
+				*firstNum = A[i - 1];
+				*secondNum = A[i];
+			}
+		}
+		else
+		{
+			if ((R - sum) < minDif)
+			{
+				minDif = R - sum;
+				*firstNum = A[i - 1];
+				*secondNum = A[i];
+			}
+		}
+	}
+}
+
+int main()
+{
+	srand(time(NULL));
+	//Задаём переменные
+	int R = 10;
+	int N = 30;
+	//Выделяем память под массив и заполняем его
+	int* A = malloc(sizeof(int) * N);
+	for (int i = 0; i < N; i++)
+	{
+		A[i] = rand() % 100;
+		printf("%d ", A[i]);
+	}
+	//Делаем 2 указателя, которые будут указывать на ячейку памяти с искомыми числами
+	int* firstNum = malloc(sizeof(int));
+	int* secondNum = malloc(sizeof(int));;
+	function(A, N, R, firstNum, secondNum);
+	printf("\n%d %d", *firstNum, *secondNum);
+	return 0;
+}
